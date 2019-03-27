@@ -1,0 +1,28 @@
+version: '3.6'
+
+services:
+  # Backend
+  backend-api:
+    container_name: backend
+    build: ./
+    command: npm start
+    working_dir: /usr/src/FaceRecognition-API
+    enviroment:
+      POSTGRES_URI: postgres://kuba:root@postgres:5432/backend-docker
+    links:
+      - postgres # BE service links to postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/FaceRecognition-API
+
+  # Postgres
+  postgres:
+    enviroment:
+      POSTGRES_USER: kuba
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: backend-docker
+      POSTGRES_HOST: postgres # Name of the service
+    build: ./postgres
+    ports:
+      - "5432:5432"
