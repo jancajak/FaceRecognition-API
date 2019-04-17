@@ -14,8 +14,6 @@ const db = knex({
   connection: process.env.POSTGRES_URI
 });
 
-console.log(bcrypt.hashSync('a'));
-
 const app = express();
 
 app.use(bodyParser.json());
