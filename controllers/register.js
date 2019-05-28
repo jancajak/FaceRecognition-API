@@ -5,6 +5,7 @@ const handleRegister = (req, res, db, bcrypt) => {
    return res.status(400).json('Enter valid data');
  }
  const hash = bcrypt.hashSync(password);
+ console.log(hash);
    db.transaction(trx => {
        trx.insert({
          hash: hash,
@@ -21,7 +22,6 @@ const handleRegister = (req, res, db, bcrypt) => {
                joined: new Date()
              })
              .then(user => {
-               console.log('I am here');
                res.json(user[0]);
              })
        })

@@ -9,6 +9,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
+
 const db = knex({
   client: 'pg',
   connection: process.env.POSTGRES_URI
@@ -19,11 +20,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/signin', signin.handleSignin(db, bcrypt));
+app.post('/signin', signin.authentication(db, bcrypt));
 
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
 
 app.get('/profile/:id',(req, res) => { profile.handleProfileGet(req, res, db) });
+
+app.post('/profile/:id', (req, res) => { profile.handleProfileUpdate(req, res, db) });
 
 app.listen(3000, () => {
   console.log('App is running on port 3000');

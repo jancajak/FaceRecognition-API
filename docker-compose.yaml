@@ -1,6 +1,25 @@
 version: '3.6'
 
 services:
+   # Postgres
+  postgres:
+    container_name: postgres
+    build: ./postgres
+    environment:
+      POSTGRES_USER: kuba
+      POSTGRES_PASSWORD: root
+      POSTGRES_URL: postgres://kuba:root@postgres:5432/backed-docker
+      POSTGRES_DB: backend-docker
+      POSTGRES_HOST: postgres
+    ports:
+      - "5432:5432"
+
+  # Redis
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
   # Backend
   backend-api:
     container_name: backend
@@ -9,20 +28,8 @@ services:
     working_dir: /usr/src/FaceRecognition-API
     environment:
       POSTGRES_URI: postgres://kuba:root@postgres:5432/backend-docker
-    links:
-      - postgres
+      REDIS_URI: redis://redis:6379
     ports:
       - "3000:3000"
     volumes:
       - ./:/usr/src/FaceRecognition-API
-
-  # Postgres
-  postgres:
-    environment:
-      POSTGRES_USER: kuba
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: backend-docker
-      POSTGRES_HOST: postgres
-    build: ./postgres
-    ports:
-      - "5432:5432"
